@@ -96,6 +96,7 @@ left_joint_trajectory_controller:
     state_publish_rate: 50.0 # Defaults to 50
     action_monitor_rate: 50.0 # Defaults to 20
 
+    allow_nonzero_velocity_at_trajectory_end: false
     allow_partial_joints_goal: false # Defaults to false
     constraints:
       stopped_velocity_tolerance: 0.01 # Defaults to 0.01
@@ -161,6 +162,7 @@ right_joint_trajectory_controller:
     state_publish_rate: 50.0 # Defaults to 50
     action_monitor_rate: 50.0 # Defaults to 20
 
+    allow_nonzero_velocity_at_trajectory_end: false
     allow_partial_joints_goal: false # Defaults to false
     constraints:
       stopped_velocity_tolerance: 0.01 # Defaults to 0.01
