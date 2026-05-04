@@ -44,7 +44,12 @@
         <joint name="openarm_right_joint6"/>
         <joint name="openarm_right_joint7"/>
         <joint name="right_openarm_hand_joint"/>
-    </group>    <!--GROUP STATES: Purpose: Define a named state for a particular group, in terms of joint values. This is useful to define states like 'folded arms'-->
+    </group>
+    <group name="upper_body">
+        <subgroup name="left_arm"/>
+        <subgroup name="right_arm"/>
+    </group>
+    <!--GROUP STATES: Purpose: Define a named state for a particular group, in terms of joint values. This is useful to define states like 'folded arms'-->
     <group name="left_gripper">
         <joint name="openarm_left_finger_joint1"/>
     </group>
