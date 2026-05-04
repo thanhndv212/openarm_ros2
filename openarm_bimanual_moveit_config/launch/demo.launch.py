@@ -31,7 +31,6 @@ from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 from moveit_configs_utils import MoveItConfigsBuilder
 
-
 def generate_robot_description(
     context: LaunchContext,
     description_package,
@@ -226,6 +225,17 @@ def generate_launch_description():
 
     moveit_params = moveit_config.to_dict()
 
+    # rviz2 does not need robot_description_planning (joint limits) or
+    # robot_description_kinematics, and passing them causes ROS2 parameter
+    # type conflicts because move_group already sets those params as doubles
+    # while rviz2 tries to re-set them as strings via nested dict serialization.
+    rviz_params = {
+        k: v
+        for k, v in moveit_params.items()
+        if k
+        not in ("robot_description_planning", "robot_description_kinematics")
+    }
+
     run_move_group_node = Node(
         package="moveit_ros_move_group",
         executable="move_group",
@@ -242,10 +252,12 @@ def generate_launch_description():
         package="rviz2",
         executable="rviz2",
         name="rviz2",
-        output="log",
+        output="screen",
         arguments=["-d", rviz_cfg],
-        parameters=[moveit_params],
+        parameters=[rviz_params],
     )
+
+    delayed_rviz = TimerAction(period=3.0, actions=[rviz_node])
 
     return LaunchDescription(
         declared_arguments
@@ -255,6 +267,6 @@ def generate_launch_description():
             delayed_arm_ctrl,
             delayed_gripper,
             run_move_group_node,
-            rviz_node,
+            delayed_rviz,
         ]
     )
